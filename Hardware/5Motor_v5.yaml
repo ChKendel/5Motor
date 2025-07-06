@@ -1,0 +1,177 @@
+name: "ESP32 Dev Controller V4"
+board: "ESP32 Dev Controller V4"
+
+uart1:
+  txd_pin: gpio.10
+  rxd_pin: gpio.9
+  rts_pin: NO_PIN
+  cts_pin: NO_PIN
+  baud: 115200
+  mode: 8N1
+
+
+
+stepping:
+  engine: RMT
+  idle_ms: 250
+  dir_delay_us: 1
+  pulse_us: 2
+  disable_delay_us: 0
+
+
+axes:
+  #shared_stepper_disable_pin: gpio.13:low
+  
+  x:
+    # 200 * 14 * 32 / 360 =  248.888
+    # 200 * 10 * 16 * 2 / 360 = 177.77
+    steps_per_mm: 177.77
+    max_rate_mm_per_min: 10000
+    acceleration_mm_per_sec2: 700
+    max_travel_mm: 1000
+    homing:
+      cycle: 2
+      mpos_mm: 10
+      positive_direction: false
+    
+    motor0:
+      tmc_2209:
+        uart_num: 1
+        addr: 0
+        r_sense_ohms: 0.10
+        run_amps: 1.2
+        hold_amps: 0.1
+        microsteps: 16
+        stallguard: 0
+        stallguard_debug: false
+        toff_disable: 0
+        toff_stealthchop: 5
+        toff_coolstep: 3
+        run_mode: StealthChop
+        homing_mode: StealthChop
+        use_enable: false
+
+      
+      stepstick:
+        direction_pin: gpio.14:low
+        step_pin: gpio.12
+        disable_pin: gpio.25:high
+    motor1:
+      null_motor:
+
+  y:
+    # 200 * 10.5 * 32 / 360  = Steps * Gear * microsteps / degree
+    #steps_per_mm: 93.3333
+    steps_per_mm: 11.666
+    max_rate_mm_per_min: 30000
+    acceleration_mm_per_sec2: 400
+    max_travel_mm: 1000
+    homing:
+      cycle: 2
+      allow_single_axis: true
+      positive_direction: false
+      mpos_mm: -12.000
+      seek_mm_per_min: 500
+      feed_mm_per_min: 50
+      feed_scaler: 20
+
+    motor0:
+      tmc_2209:
+        uart_num: 1
+        addr: 1
+        r_sense_ohms: 0.10
+        run_amps: 1.4
+        hold_amps: 0.3
+        microsteps: 2
+        stallguard: 0
+        stallguard_debug: false
+        toff_disable: 0
+        toff_stealthchop: 5
+        toff_coolstep: 3
+        run_mode: StealthChop
+        homing_mode: Stallguard
+        use_enable: false
+      limit_all_pin: gpio.4:low:pu
+      stepstick:
+        direction_pin: gpio.15:high
+        step_pin: gpio.26
+        #disable_pin: gpio.13:low
+
+
+  z:
+    # 200 * 14 * 32 / 360  = Steps * Gear * microsteps / degree
+    # 200 * 14 * 8 / 360  = Steps * Gear * microsteps / degree
+    # 200 * 18.7 * 2 / 360 = 
+    #steps_per_mm: 62.22222
+    #steps_per_mm: 15.555
+    steps_per_mm: 20.7777
+    max_rate_mm_per_min: 30000
+    acceleration_mm_per_sec2: 400
+    max_travel_mm: 10000
+    homing:
+      cycle: 2
+      allow_single_axis: true
+      positive_direction: false
+      mpos_mm: -12.000
+      seek_mm_per_min: 500
+      feed_mm_per_min: 50
+      feed_scaler: 20
+
+    motor0:      
+      tmc_2209:
+        uart_num: 1
+        addr: 2
+        r_sense_ohms: 0.10
+        run_amps: 1.4
+        hold_amps: 0.4
+        microsteps: 2
+        stallguard: 0
+        stallguard_debug: false
+        toff_disable: 0
+        toff_stealthchop: 5
+        toff_coolstep: 3
+        #StealthChop, CoolStep or Stallguard
+        run_mode: StealthChop
+        homing_mode: Stallguard
+        use_enable: false
+      limit_all_pin: gpio.32:high
+      #limit_all_pin: gpio.16:low:pu
+      stepstick:
+        direction_pin: gpio.33:high
+        step_pin: gpio.27
+        #disable_pin: gpio.2:high
+        disable_pin: NO_PIN
+    motor1:
+      null_motor:
+
+#spi:
+  #miso_pin: gpio.19
+  #mosi_pin: gpio.23
+  #sck_pin: gpio.18
+
+#sdcard:
+#  cs_pin: gpio.5
+#  card_detect_pin: NO_PIN
+
+#coolant:
+  #flood_pin: gpio.25
+  #mist_pin:  gpio.21
+
+        
+#probe:
+#  pin: gpio.32:low:pu
+
+#PWM:
+#  pwm_hz: 5000
+#  output_pin: gpio.2
+#  enable_pin: gpio.22
+#  direction_pin: NO_PIN
+#  disable_with_s0: false
+#  s0_with_disable: true
+#  spinup_ms: 0
+#  spindown_ms: 0
+#  tool_num: 0
+#  speed_map: 0=0% 10000=100%
+
+start:
+  must_home: false
